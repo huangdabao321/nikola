@@ -1,0 +1,15 @@
+{
+  "name": "@nikola/cli",
+  "version": "1.0.0",
+  "description": "nikola cli",
+  "main": "index.js",
+  "bin" : {
+    "nikola": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
