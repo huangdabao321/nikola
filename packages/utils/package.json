@@ -1,0 +1,9 @@
+{
+  "name": "@nikola/utils",
+  "version": "1.0.0",
+  "description": "utils",
+  "main": "index.js",
+  "keywords": [],
+  "author": "尼古拉斯﹒宝哥",
+  "license": "MIT"
+}
