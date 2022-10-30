@@ -11,7 +11,10 @@ module.exports = {
   ],
   overrides: [
     {
-      files: ["packages/{admin}/**"]
+      files: ["packages/{admin}/**"],
+      rule: {
+        "vue/no-multiple-template-root": 0
+      }
     },
   ],
   parserOptions: {

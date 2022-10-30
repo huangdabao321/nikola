@@ -1,14 +1,14 @@
 <template>
-  <div>
-    main
+  <a-layout-content>
+    content
     <slot></slot>
-  </div>
+  </a-layout-content>
 </template>
 
 <script setup>
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 
 </style>
