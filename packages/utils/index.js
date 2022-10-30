@@ -1,5 +1,6 @@
 function device() {
   return window.navigator
+  console.log('11')
 }
 
 function isMobile() {
