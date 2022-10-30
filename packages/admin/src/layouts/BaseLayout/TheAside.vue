@@ -3,12 +3,12 @@
     breakpoint="lg"
     collapsedWidth="0"
     :collapsed="collapsed"
-    @collapse="onCollapse"
     @breakpoint="onBreakpoint"
     :style="{
       overflow: 'auto',
       height: '100vh'
     }"
+    :trigger="null"
   >
   <div class="logo">
       <img src="@/assets/logo.png" alt="logo">
@@ -24,17 +24,25 @@
 
 <script setup>
 import { UserOutlined } from '@ant-design/icons-vue';
+import { useMenuStore } from '@/stores/menu'
+import { storeToRefs } from 'pinia'
+
+const menuStore = useMenuStore()
+
+const { menu } = storeToRefs(menuStore)
+
+console.log('menu:', menu)
+
 const props = defineProps({
   collapsed: {
     type: Boolean,
     default: false
   }
 })
-const onCollapse = (collapsed, type) => {
-  console.log(collapsed, type)
-}
-const onBreakpoint = (broken) => {
-  console.log(broken)
+
+const emit = defineEmits('')
+const onBreakpoint = (val) => {
+  emit('triggerCollapsed', val)
 }
 </script>
 

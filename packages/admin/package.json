@@ -13,6 +13,7 @@
     "@ant-design/icons-vue": "^6.1.0",
     "@nikola/utils": "workspace:^1.0.0",
     "ant-design-vue": "^3.2.13",
+    "pinia": "^2.0.23",
     "vue": "^3.2.41",
     "vue-router": "4"
   },

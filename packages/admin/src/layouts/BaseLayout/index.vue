@@ -1,15 +1,15 @@
 <template>
   <a-layout>
-    <the-aside :collapsed="collapsed"></the-aside>
-      <a-layout>
-        <the-header
-          @triggerCollapsed="handleTrigger"
-          :collapsed="collapsed"
-        ></the-header>
-        <the-main>
-          <router-view></router-view>
-        </the-main>
-      </a-layout>
+    <the-aside @triggerCollapsed="handleTrigger" :collapsed="collapsed"></the-aside>
+    <a-layout>
+      <the-header
+        @triggerCollapsed="handleTrigger"
+        :collapsed="collapsed"
+      ></the-header>
+      <the-main>
+        <router-view></router-view>
+      </the-main>
+    </a-layout>
   </a-layout>
 </template>
 
@@ -20,11 +20,9 @@ import TheMain from "./TheMain.vue";
 import { ref } from "vue";
 
 let collapsed = ref(false);
-console.log("------->", collapsed);
 
 const handleTrigger = (val) => {
   collapsed.value = val;
-  console.log("trigger:", val);
 };
 </script>
 
