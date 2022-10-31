@@ -1,18 +1,5 @@
-function device() {
-  return window.navigator
-  console.log('11')
-}
+import request from "./request";
+import stroe from "./stroe";
+import { isMobile, isPc, isWechat } from "./util";
 
-function isMobile() {
-
-}
-
-function isPc() {
-
-}
-
-function isWechat() {
-  
-}
-
-export { device, isMobile, isPc, isWechat }
+export { isMobile, isPc, isWechat, request, stroe };
