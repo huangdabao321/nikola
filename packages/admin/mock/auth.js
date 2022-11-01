@@ -1,23 +1,22 @@
-// import { MockMethod } from "vite-plugin-mock";
 export default [
   {
     url: "/api/login",
-    method: "get",
-    response: ({ query }) => {
-      if (query.name === 'admin') {
+    method: "post",
+    response: ({ body }) => {
+      if (body.name === "admin") {
         return {
           code: 0,
           data: {
             accessToken: "adminToken",
             expireIn: 36000,
           },
-        }
+        };
       }
       return {
         code: 0,
         data: {
           accessToken: "testToken",
-          expireIn: 36000,
+          expireIn: 36000
         },
       };
     },
@@ -25,8 +24,8 @@ export default [
   {
     url: "/api/userinfo",
     method: "get",
-    response: ({ query }) => {
-      console.log('>>>>>>>',query)
+    response: ({ body, headers }) => {
+      console.log(">>>>>>>", body, headers);
       return {
         code: 0,
         data: {

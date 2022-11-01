@@ -32,24 +32,28 @@ import { WechatOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { useRouter } from 'vue-router'
 import { isWechat } from "@nikola/utils";
+import { useUserStore } from "../../stores/user";
+
+const router = useRouter()
 
 const formState = reactive({
   name: "admin",
   pwd: 123456,
 });
 
+const userStore = useUserStore()
+
 const onSubmit = () => {
-  login(toRaw(formState))
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((error) => {
-      console.log(error);
-      // message.error(error.msg);
-    });
+  userStore.login(toRaw(formState)).then(() => {
+    message.success('登陆成功!')
+    router.push('/')
+  }).catch(error => {
+    console.log(error)
+    message.error(error.msg)
+  })
 };
 
-const router = useRouter()
+
 const onWechatLogin = () => {
   router.push('/wechat/login')
 }

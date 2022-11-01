@@ -1,5 +1,5 @@
 import axios from "axios";
-import store from "./stroe";
+import store from "./store";
 const instance = axios.create({
   timeout: 1000,
 });
@@ -20,7 +20,7 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   function (response) {
-    return Promise.resolve(response);
+    return Promise.resolve(response.data);
   },
   function (error) {
     return Promise.reject(error);

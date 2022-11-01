@@ -1,5 +1,5 @@
 import { request } from "@nikola/utils";
 
-// request.defaults.baseURL = 'https://api.xinyueche.com/api'
+import.meta.env.PROD && (request.defaults.baseURL = import.meta.env.VITE_APIURL)
 
 export default request

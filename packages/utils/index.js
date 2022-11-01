@@ -1,5 +1,5 @@
 import request from "./request";
-import stroe from "./stroe";
-import { isMobile, isPc, isWechat } from "./util";
+import store from "./store";
+import { isMobile, isPc, isWechat, setDocumentTitle } from "./util";
 
-export { isMobile, isPc, isWechat, request, stroe };
+export { isMobile, isPc, isWechat, request, store, setDocumentTitle };

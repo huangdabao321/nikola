@@ -4,7 +4,7 @@ const store = {
     const expireKey = `expire_${key}`
     const deadAt = +localStorage.getItem(expireKey)
     if (deadAt) {
-      if (new Date().getSeconds() > deadAt) {
+      if (Date.now() > deadAt) {
         this.del(key)
         return null
       } else{
@@ -14,7 +14,8 @@ const store = {
     return val
     
   },
-  set(key, val, expire = undefined){
+  set(key, val, expire){
+    console.log(key, val, expire)
     if (expire) {
       if (isNaN(expire)) {
         return `过期时间不合法`
@@ -23,7 +24,7 @@ const store = {
         this.del(key)
       } else {
         const expireKey = `expire_${key}`
-        const deadAt = new Date().getSeconds() + expire
+        const deadAt = Date.now() + expire * 1000
         localStorage.setItem(key, val)
         localStorage.setItem(expireKey, deadAt)
       }

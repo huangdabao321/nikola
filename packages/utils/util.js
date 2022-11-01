@@ -8,3 +8,7 @@ export const isPc = !isMobile;
 export const isWechat = window.navigator.userAgent
   .toLowerCase()
   .includes("micromessenger");
+
+export function setDocumentTitle(title) {
+  document.title = title
+}

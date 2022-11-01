@@ -31,8 +31,6 @@ const menuStore = useMenuStore()
 
 const { menu } = storeToRefs(menuStore)
 
-console.log('menu:', menu)
-
 const props = defineProps({
   collapsed: {
     type: Boolean,
