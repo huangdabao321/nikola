@@ -15,7 +15,6 @@ const store = {
     
   },
   set(key, val, expire){
-    console.log(key, val, expire)
     if (expire) {
       if (isNaN(expire)) {
         return `过期时间不合法`

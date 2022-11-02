@@ -10,12 +10,14 @@
       class="trigger"
       @click="$emit('triggerCollapsed', true)"
     />
+    <user-info></user-info>
   </a-layout-header>
 </template>
 
 <script setup>
-import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
 import { ref } from "vue";
+import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
+import UserInfo from './UserInfo.vue'
 
 const props = defineProps({
   collapsed: {
@@ -30,6 +32,9 @@ const emit = defineEmits(['triggerCollapsed'])
 
 <style lang="less" scoped>
 .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background-color: #fff;
   padding: 0 20px;
   span{

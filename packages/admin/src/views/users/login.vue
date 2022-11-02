@@ -27,12 +27,12 @@
 
 <script setup>
 import { reactive, toRaw } from "vue";
-import { login } from "@/apis/login";
+import { login } from "@/apis/auth";
 import { WechatOutlined } from "@ant-design/icons-vue";
 import { message } from "ant-design-vue";
 import { useRouter } from 'vue-router'
 import { isWechat } from "@nikola/utils";
-import { useUserStore } from "../../stores/user";
+import { useUserStore } from "@/stores/user";
 
 const router = useRouter()
 

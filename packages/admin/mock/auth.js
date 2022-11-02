@@ -25,14 +25,16 @@ export default [
     url: "/api/userinfo",
     method: "get",
     response: ({ body, headers }) => {
-      console.log(">>>>>>>", body, headers);
       return {
         code: 0,
         data: {
+          id: 1,
           name: "admin",
           avatar:
             "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
           // "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
+          roles: ['admin'],
+          permissions: []
         },
       };
     },
