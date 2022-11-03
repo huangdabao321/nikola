@@ -1,10 +1,14 @@
 import { defineStore } from "pinia";
-import { reactive } from "vue";
 
-export const useMenuStore = defineStore('menu', () => {
-  let menu = reactive([])
-  function setMenu(val) {
-    menu = [...val]
+export const useMenuStore = defineStore('menu', {
+  state: () => {
+    return {
+      menus: []
+    }
+  },
+  actions: {
+    setMenu(val) {
+      this.menus = val
+    }
   }
-  return { menu, setMenu  }
 })

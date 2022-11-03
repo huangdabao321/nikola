@@ -1,11 +1,6 @@
+import { defineAsyncComponent } from 'vue'
 import { getMenus } from "@/apis/menu";
 import { BaseLayout, RouterView } from '@/layouts'
-
-const notFound = {
-  path: "/:pathMatch(.*)*",
-  name: "NotFound",
-  component: () => import("@/views/errors/404.vue"),
-};
 
 const constRouterComponents = {
   BaseLayout,
@@ -23,7 +18,6 @@ export function generateMenus(roles) {
         const menus = [];
         listToTree(data, menus, 0);
         const routes = transformData(menus);
-        routes.push(notFound);
         resolve(routes);
       })
       .catch((error) => {
@@ -39,7 +33,7 @@ function transformData(data) {
       pid: item.pid,
       name: item.name,
       path: item.path,
-      component: constRouterComponents[item.component] || (() => import(`@/views/${item.component}.vue`)) ,
+      component: constRouterComponents[item.component] || defineAsyncComponent(() => import(`@/views/${item.component}.vue`)),
       meta: {
         title: item.title,
         icon: item.icon || "",

@@ -12,7 +12,7 @@ export default [
             name: 'index',
             title: '首页',
             path: '/',
-            redirect: 'welcome',
+            redirect: '/welcome',
             component: 'BaseLayout',
             permissions: ['index']
           },

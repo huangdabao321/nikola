@@ -39,7 +39,6 @@ export const useUserStore = defineStore("user", () => {
         user.permissions = permissions
         resolve(roles)
       }).catch(error => {
-        console.log('=======>',error)
         reject(error)
       })
     })

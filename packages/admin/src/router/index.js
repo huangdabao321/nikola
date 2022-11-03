@@ -1,5 +1,12 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { generateMenus } from "./_utils";
+
+const notFound = {
+  path: "/:pathMatch(.*)*",
+  name: "NotFound",
+  component: () => import("@/views/errors/404.vue"),
+};
+
 const routes = [
   {
     path: "/user",
@@ -20,6 +27,8 @@ const routes = [
     ],
   },
 ];
+
+
 const router = createRouter({
   history: createWebHistory(),
   routes,
@@ -27,4 +36,4 @@ const router = createRouter({
 
 export default router;
 
-export { generateMenus };
+export { generateMenus, notFound };
