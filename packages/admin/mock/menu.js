@@ -14,25 +14,31 @@ export default [
             path: '/',
             redirect: '/welcome',
             component: 'BaseLayout',
-            permissions: ['index']
+            permissions: ['index'],
+            hiddenInMenu: true,
+            keepAlive: true
           },
           {
             id: 2,
             pid: 1,
             name: 'welcome',
             title: '欢迎页',
-            path: 'welcome',
+            path: '/welcome',
             component: 'welcome',
-            permissions: ['index']
+            permissions: ['index'],
+            hiddenInMenu: true,
+            keepAlive: true
           },
           {
             id: 3,
             pid: 1,
             name: 'usercenter',
             title: '个人中心',
-            path: 'usercenter',
+            path: '/usercenter',
             component: 'profile/index',
-            permissions: []
+            permissions: [],
+            hiddenInMenu: true,
+            keepAlive: true
           }
         ]
       }

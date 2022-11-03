@@ -1,11 +1,13 @@
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from "vue";
 import { getMenus } from "@/apis/menu";
-import { BaseLayout, RouterView } from '@/layouts'
+import { BaseLayout, RouterView } from "@/layouts";
+
+const modules = import.meta.glob(["../views/*/*.vue", "../views/*.vue"]);
 
 const constRouterComponents = {
   BaseLayout,
-  RouterView
-}
+  RouterView,
+};
 /**
  * 动态生成菜单
  * @param { array } roles
@@ -33,20 +35,22 @@ function transformData(data) {
       pid: item.pid,
       name: item.name,
       path: item.path,
-      component: constRouterComponents[item.component] || defineAsyncComponent(() => import(`@/views/${item.component}.vue`)),
+      component:
+        constRouterComponents[item.component] ||
+        modules[`../views/${item.component}.vue`],
       meta: {
         title: item.title,
         icon: item.icon || "",
         permissions: [...item.permissions],
         keepAlive: item.keepAlive,
         // 菜单栏是否显示
-        hiddenInMenu: item.hidden
+        hiddenInMenu: item.hiddenInMenu,
       },
     };
     // 重定向
     item.redirect && (route.redirect = item.redirect);
-    if(item.children && item.children.length) {
-      route.children = transformData(item.children)
+    if (item.children && item.children.length) {
+      route.children = transformData(item.children);
     }
     return route;
   });

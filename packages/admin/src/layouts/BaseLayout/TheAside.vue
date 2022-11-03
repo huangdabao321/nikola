@@ -14,7 +14,7 @@
       <img src="@/assets/logo.png" alt="logo" />
     </div>
     <a-menu theme="dark" mode="inline" @click="onMenu">
-      <template v-for="item in menuData" :key="item.path">
+      <template v-for="item in menuData">
         <template v-if="!item.children">
           <a-menu-item :key="item.path">
             <!-- <user-outlined></user-outlined> -->
@@ -22,7 +22,7 @@
           </a-menu-item>
         </template>
         <template v-else>
-          <sub-menu :menu-info="item"></sub-menu>
+          <sub-menu :menu-info="item" :key="item.path"></sub-menu>
         </template>
       </template>
     </a-menu>
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { computed, toRaw } from "vue";
+import { computed, isRef, onUpdated, toRaw } from "vue";
 import { useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import { UserOutlined } from "@ant-design/icons-vue";
@@ -39,13 +39,21 @@ import SubMenu from "./SubMenu.vue";
 
 const menuStore = useMenuStore();
 
-const { menus } = menuStore;
+const { menus } = storeToRefs(menuStore);
+
 
 const menuData = computed(() => {
-  return menus[0].children;
+  let data = [];
+  menus.value.forEach((item) => {
+    if (item.name === "index") {
+      data = data.concat(...item.children);
+    } else {
+      data.push(item);
+    }
+  });
+  return data;
 });
-// const test = toRaw(menus)
-// console.log("menuData", menus[0].children,);
+
 
 const props = defineProps({
   collapsed: {

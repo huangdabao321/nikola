@@ -1,14 +1,14 @@
 <template>
   <a-sub-menu>
     <template #title>{{ menuInfo.meta.title }}</template>
-    <template v-for="item in menuInfo.children" :key="item.path">
+    <template v-for="item in menuInfo.children" >
       <template v-if="!item.children">
-        <a-menu-item :key="`${menuInfo.path}${item.path}`">
+        <a-menu-item :key="item.path">
           {{ item.meta.title }}
         </a-menu-item>
       </template>
       <template v-else>
-        <sub-menu :menu-info="item.children"></sub-menu>
+        <sub-menu :menu-info="item.children" :key="item.path"></sub-menu>
       </template>
     </template>
   </a-sub-menu>
