@@ -14,7 +14,7 @@
       <img src="@/assets/logo.png" alt="logo" />
     </div>
     <a-menu theme="dark" mode="inline" @click="onMenu">
-      <template v-for="item in menuData">
+      <template v-for="item in menuStore.sideMenus">
         <template v-if="!item.children">
           <a-menu-item :key="item.path">
             <!-- <user-outlined></user-outlined> -->
@@ -30,30 +30,11 @@
 </template>
 
 <script setup>
-import { computed, isRef, onUpdated, toRaw } from "vue";
 import { useRouter } from "vue-router";
-import { storeToRefs } from "pinia";
 import { UserOutlined } from "@ant-design/icons-vue";
 import { useMenuStore } from "@/stores/menu";
 import SubMenu from "./SubMenu.vue";
-
-const menuStore = useMenuStore();
-
-const { menus } = storeToRefs(menuStore);
-
-
-const menuData = computed(() => {
-  let data = [];
-  menus.value.forEach((item) => {
-    if (item.name === "index") {
-      data = data.concat(...item.children);
-    } else {
-      data.push(item);
-    }
-  });
-  return data;
-});
-
+import { isUrl } from "@nikola/utils";
 
 const props = defineProps({
   collapsed: {
@@ -62,6 +43,8 @@ const props = defineProps({
   },
 });
 
+const menuStore = useMenuStore();
+
 const emit = defineEmits(["triggerCollapsed"]);
 const onBreakpoint = (val) => {
   emit("triggerCollapsed", val);
@@ -69,7 +52,11 @@ const onBreakpoint = (val) => {
 
 const router = useRouter();
 const onMenu = ({ key }) => {
-  router.push(key);
+  if (isUrl(key)) {
+    window.location.href = key
+  } else {
+    router.push(key);
+  }
 };
 </script>
 

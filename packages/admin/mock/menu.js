@@ -15,7 +15,7 @@ export default [
             redirect: '/welcome',
             component: 'BaseLayout',
             permissions: ['index'],
-            hiddenInMenu: true,
+            hideInMenu: false,
             keepAlive: true
           },
           {
@@ -26,7 +26,7 @@ export default [
             path: '/welcome',
             component: 'welcome',
             permissions: ['index'],
-            hiddenInMenu: true,
+            hideInMenu: false,
             keepAlive: true
           },
           {
@@ -37,7 +37,10 @@ export default [
             path: '/usercenter',
             component: 'profile/index',
             permissions: [],
-            hiddenInMenu: true,
+            // 在菜单中隐藏自己
+            hideInMenu: false,
+            // 在菜单中隐藏子节点
+            hideChildInMenu: false,
             keepAlive: true
           }
         ]

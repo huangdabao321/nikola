@@ -1,4 +1,3 @@
-import { defineAsyncComponent } from "vue";
 import { getMenus } from "@/apis/menu";
 import { BaseLayout, RouterView } from "@/layouts";
 
@@ -44,7 +43,9 @@ function transformData(data) {
         permissions: [...item.permissions],
         keepAlive: item.keepAlive,
         // 菜单栏是否显示
-        hiddenInMenu: item.hiddenInMenu,
+        hideInMenu: item.hideInMenu,
+        // 菜单子菜单是否显示
+        hideChildInMenu: item.hideChildInMenu,
       },
     };
     // 重定向
