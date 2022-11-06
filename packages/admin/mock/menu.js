@@ -45,11 +45,11 @@ export default [
           },
           {
             id: 4,
-            pid: 1,
+            pid: 0,
             name: 'activity',
             title: '活动管理',
             path: '/activity',
-            component: 'activity/index',
+            component: 'RouterView',
             permissions: [],
             // 在菜单中隐藏自己
             hideInMenu: false,

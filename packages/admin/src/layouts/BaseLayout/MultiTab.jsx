@@ -1,75 +1,101 @@
-import { watch } from "less";
-import { defineComponent, ref, reactive } from "vue";
+import { defineComponent, ref, reactive, watchEffect, watch } from "vue";
+import { Tabs, Menu, Dropdown } from "ant-design-vue";
 import { useRouter } from "vue-router";
 import "./multitab.less";
 
+const { TabPane } = Tabs;
+const { Item } = Menu;
+
 export default defineComponent({
   name: "MultiTab",
-  setup(props, { emit }) {
-    const fullPathList = reactive([]);
+  setup(props, { expose }) {
+    let fullPathList = reactive([]);
     const pages = reactive([]);
     const activeKey = ref("");
     const newTabIndex = ref(0);
 
-    const onEdit = (targetKey, action) => {};
+    const remove = (targetKey) => {
+      fullPathList = fullPathList.filter((key) => key !== targetKey);
+    };
 
-    const remove = (targetKey) => {};
+    // 切换tab
+    function tabChange(key) {
+      router.push(key);
+    }
+    // 关闭tab pane
+    const onEdit = (targetKey, action) => {
+      remove(targetKey);
+    };
 
     const selectedLastPath = () => {};
-
-    const closeThat = () => {};
-
-    const closeLeft = (e) => {};
-
-    const closeRight = (e) => {};
-
-    const closeAll = (e) => {};
-
-    const closeMenuClick = (key, route) => {
-      key(route);
+    // 关闭当前
+    const closeThat = (path) => {
+      console.log('xxx')
     };
 
-    const renderTabPaneMenu = (e) => {
-      return (
-        <a-menu
-          {...{
-            on: { click: ({ key, item, domEvent }) => closeMenuClick(key, e) },
-          }}
-        >
-          <a-menu-item key="closeThat">关闭当前标签</a-menu-item>
-          <a-menu-item key="closeRight">关闭右侧</a-menu-item>
-          <a-menu-item key="closeLeft">关闭左侧</a-menu-item>
-          <a-menu-item key="closeAll">关闭全部</a-menu-item>
-        </a-menu>
-      );
+    const closeLeft = (path) => {};
+
+    const closeRight = (path) => {};
+
+    const closeAll = () => {
+
     };
 
-    const renderTabPane = (title, keyPath) => {
-      const menus = renderTabPaneMenu(keyPath);
-      return (
-        <a-dropdown overlay={menus} trigger={["contextmenu"]}>
-          <span>{title}</span>
-        </a-dropdown>
-      );
+    const actionMap = {
+      closeThat,
+      closeLeft,
+      closeRight,
+      closeAll
+    }
+
+    const closeMenuClick = (fullPath, action) => {
+      // 右键菜单对应的操作
+      console.log("菜单操作", fullPath, action);
+      actionMap[action](fullPath)
     };
 
     const router = useRouter();
-    watch(router, (newVal, oldVal) => {
-      // 监听route
+    watchEffect(() => {
+      const route = router.currentRoute.value;
+      const { fullPath } = route;
+      activeKey.value = fullPath;
+      if (!fullPathList.includes(fullPath)) {
+        fullPathList.push(fullPath);
+        pages.push(route);
+      }
+      console.log(activeKey.value)
     });
 
-    watch(activeKey, (newVal, olbVal) => {
-      // 监听activeKey
-    });
-  },
-  render() {
-    return (
+    const renderTabPaneMenu = (fullPath) => {
+      return (
+        <Menu onClick={({ key }) => closeMenuClick(fullPath, key)}>
+          <Item key="closeThat">关闭当前标签</Item>
+          <Item key="closeRight">关闭右侧</Item>
+          <Item key="closeLeft">关闭左侧</Item>
+          <Item key="closeAll">关闭全部</Item>
+        </Menu>
+      );
+    };
+
+    const renderTabPane = (title, fullPath) => {
+      const menus = renderTabPaneMenu(fullPath);
+      return (
+        <Dropdown overlay={menus} trigger={["contextmenu"]}>
+          <span>{title}</span>
+        </Dropdown>
+      );
+    };
+
+    return () => (
       <div className="multi-tab">
         <div className="multi-tab-wrap">
-          <a-tabs
+          <Tabs
             hideAdd
             type="editable-card"
-            v-model={activeKey}
+            animated={false}
+            v-model={[activeKey.value, 'activeKey']}
+            onChange={(key) => tabChange(key)}
+            onEdit={(targetKey, action) => onEdit(targetKey, action)}
             tabBarStyle={{
               background: "#FFF",
               margin: 0,
@@ -77,16 +103,15 @@ export default defineComponent({
               paddingTop: "1px",
             }}
           >
-            asdgf
             {pages.map((page) => {
               return (
-                <a-tab-pane
+                <TabPane
                   tab={renderTabPane(page.meta.title, page.fullPath)}
                   key={page.fullPath}
-                ></a-tab-pane>
+                ></TabPane>
               );
             })}
-          </a-tabs>
+          </Tabs>
         </div>
       </div>
     );
