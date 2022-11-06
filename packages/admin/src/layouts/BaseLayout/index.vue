@@ -7,13 +7,14 @@
         :collapsed="collapsed"
       ></the-header>
       <the-main>
-        <router-view></router-view>
+        <multi-tab #default></multi-tab>
       </the-main>
     </a-layout>
   </a-layout>
 </template>
 
 <script setup>
+import MultiTab from './MultiTab.jsx';
 import TheHeader from "./TheHeader.vue";
 import TheAside from "./TheAside.vue";
 import TheMain from "./TheMain.vue";

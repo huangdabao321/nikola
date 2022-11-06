@@ -42,7 +42,21 @@ export default [
             // 在菜单中隐藏子节点
             hideChildInMenu: false,
             keepAlive: true
-          }
+          },
+          {
+            id: 4,
+            pid: 1,
+            name: 'activity',
+            title: '活动管理',
+            path: '/activity',
+            component: 'activity/index',
+            permissions: [],
+            // 在菜单中隐藏自己
+            hideInMenu: false,
+            // 在菜单中隐藏子节点
+            hideChildInMenu: false,
+            keepAlive: true
+          },
         ]
       }
     }

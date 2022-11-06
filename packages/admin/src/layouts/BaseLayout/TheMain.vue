@@ -1,7 +1,7 @@
 <template>
   <a-layout-content>
-    content
-    <slot></slot>
+    <slot name="default"></slot>
+    <router-view></router-view>
   </a-layout-content>
 </template>
 
