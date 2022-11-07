@@ -1,15 +1,15 @@
 <template>
   <a-layout>
-    <the-aside @triggerCollapsed="handleTrigger" :collapsed="collapsed"></the-aside>
+    <the-aside
+      @triggerCollapsed="handleTrigger"
+      :collapsed="collapsed"
+    ></the-aside>
     <a-layout>
       <the-header
         @triggerCollapsed="handleTrigger"
         :collapsed="collapsed"
       ></the-header>
-      <MultiTab/>
-      <the-main>
-        <!-- <multi-tab></multi-tab> -->
-      </the-main>
+      <the-main></the-main>
     </a-layout>
   </a-layout>
 </template>
@@ -18,7 +18,7 @@
 import TheHeader from "./TheHeader.vue";
 import TheAside from "./TheAside.vue";
 import TheMain from "./TheMain.vue";
-import MultiTab from './MultiTab.jsx';
+
 import { ref } from "vue";
 
 let collapsed = ref(false);
