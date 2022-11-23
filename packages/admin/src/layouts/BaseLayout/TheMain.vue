@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import MultiTab from './MultiTab.vue';
+import MultiTab from './MultiTab.jsx';
 </script>
 
 <style lang="less" scoped>

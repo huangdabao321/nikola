@@ -1,11 +1,11 @@
 <template>
   <a-tabs
     hideAdd
-    @edit="onEdit"
     v-model:activeKey="state.activeKey"
-    type="editable-card"
+    type="card"
+    class="multi-tab"
   >
-    <a-tab-pane v-for="page in pages" :key="page.fullPath">
+    <a-tab-pane v-for="page in state.pages" :key="page.fullPath">
       <template #tab>
         <a-dropdown :trigger="['contextmenu']">
           <template #overlay>
@@ -24,51 +24,67 @@
 </template>
 
 <script setup>
-import { reactive, watchEffect, ref, unref, isRef } from "vue";
+import { reactive, watchEffect, unref, toRaw } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 const state = reactive({
   fullPathList: [],
+  pages: [],
   activeKey: "",
 });
 
-const pages = ref([]);
-
-const onEdit = (targetKey) => {
-  remove(targetKey);
-};
+// const onEdit = (targetKey) => {
+//   remove(targetKey);
+// };
 
 const remove = (targetKey) => {
   if (state.fullPathList.length > 1) {
-    let lastIndex = 0;
-    pages.value.forEach((page, i) => {
-      if (page.fullPath === targetKey) {
-        lastIndex = i - 1;
-      }
-    });
-    state.fullPathList = state.fullPathList.filter((key) => key !== targetKey);
-    pages.value = unref(
-      pages.value.filter((page) => page.fullPath !== targetKey),
+    let lastIndex = state.pages.findIndex(
+      (page) => page.fullPath === targetKey,
     );
-    const temp = pages.value.filter((page) => page.fullPath !== targetKey)
-    console.log('temp', isRef(temp))
-    state.activeKey = pages[lastIndex].fullPath;
+    state.fullPathList = toRaw(state.fullPathList).filter(
+      (key) => key !== targetKey,
+    );
+    state.pages = toRaw(state.pages).filter(
+      (page) => page.fullPath !== targetKey,
+    );
+    state.activeKey = state.pages[lastIndex - 1].fullPath;
     router.push(state.activeKey);
   }
 };
 
+const closeMenuClick = (path, key) => {
+  console.log(path, key);
+};
+
 watchEffect(() => {
-  const route = unref(router.currentRoute.value);
+  const route = unref(router.currentRoute);
   const { fullPath } = route;
   console.log(state.fullPathList.indexOf(fullPath) < 0);
   if (state.fullPathList.indexOf(fullPath) < 0) {
     state.fullPathList.push(fullPath);
-    pages.value.push(route);
+    state.pages.push(route);
     state.activeKey = fullPath;
   }
 });
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.multi-tab {
+  /deep/ .ant-tabs-nav {
+    margin: 0;
+    .ant-tabs-nav-wrap {
+      background-color: white;
+
+      .ant-tabs-tab {
+        padding: 4px 8px;
+        .ant-tabs-tab-btn {
+          user-select: none;
+        }
+      }
+    }
+  }
+}
+</style>

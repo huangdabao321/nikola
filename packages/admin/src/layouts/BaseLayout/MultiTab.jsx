@@ -1,8 +1,4 @@
-import {
-  defineComponent,
-  reactive,
-  watchEffect,
-} from "vue";
+import { defineComponent, reactive, unref, watchEffect } from "vue";
 import { Tabs, Menu, Dropdown } from "ant-design-vue";
 import { useRouter } from "vue-router";
 import "./multitab.less";
@@ -22,10 +18,18 @@ export default defineComponent({
 
     const remove = (targetKey) => {
       if (state.fullPathList.length > 1) {
-        state.fullPathList = state.fullPathList.filter((path) => path !== targetKey);
-        const pages = state.pages.filter((route) => route.path !== targetKey)
-      
-        console.log('======>', state.fullPathList, pages)
+        const index = state.pages.findIndex(
+          (page) => page.fullPath === targetKey,
+        );
+        state.fullPathList = unref(state.fullPathList).filter(
+          (path) => path !== targetKey,
+        );
+        state.pages = unref(state.pages).filter(
+          (route) => route.path !== targetKey,
+        );
+
+        state.activeKey = state.pages[index - 1].fullPath;
+        router.push(state.activeKey);
       }
     };
 
@@ -66,14 +70,12 @@ export default defineComponent({
 
     const router = useRouter();
     watchEffect(() => {
-      const route = router.currentRoute.value;
+      const route = unref(router.currentRoute);
       const { fullPath } = route;
       state.activeKey = fullPath;
-      console.log('watchEffect', fullPath, state.fullPathList.includes(fullPath), state.fullPathList)
       if (!state.fullPathList.includes(fullPath)) {
         state.fullPathList.push(fullPath);
         state.pages.push(route);
-        console.log(state.pages);
       }
     });
 
