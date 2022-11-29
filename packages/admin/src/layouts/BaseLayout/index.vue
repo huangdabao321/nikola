@@ -1,31 +1,18 @@
-<template>
-  <a-layout>
-    <the-aside
-      @triggerCollapsed="handleTrigger"
-      :collapsed="collapsed"
-    ></the-aside>
-    <a-layout>
-      <the-header
-        @triggerCollapsed="handleTrigger"
-        :collapsed="collapsed"
-      ></the-header>
-      <the-main></the-main>
-    </a-layout>
-  </a-layout>
-</template>
-
-<script setup>
+<script setup lang="ts">
+import { Layout } from "ant-design-vue";
 import TheHeader from "./TheHeader.vue";
-import TheAside from "./TheAside.vue";
-import TheMain from "./TheMain.vue";
-
-import { ref } from "vue";
-
-let collapsed = ref(false);
-
-const handleTrigger = (val) => {
-  collapsed.value = val;
-};
+import SideMenu from "./SideMenu.vue";
+import TheContent from "./TheContent.vue";
 </script>
 
-<style lang="less" scoped></style>
+<template>
+  <Layout>
+    <TheHeader></TheHeader>
+    <Layout>
+      <SideMenu></SideMenu>
+      <TheContent>
+        <RouterView />
+      </TheContent>
+    </Layout>
+  </Layout>
+</template>

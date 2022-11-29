@@ -1,40 +1,52 @@
 <template>
-  <a-row class="wrap">
-    <a-col :sm="0" :md="8"></a-col>
-    <a-col :sm="24" :md="8">
-      <router-view></router-view>
-    </a-col>
-    <a-col :sm="0" :md="8"></a-col>
-  </a-row>
-  <footer>
-    <a href="https://beian.miit.gov.cn/">鄂ICP备18022120号-1</a>
-  </footer>
+  <div class="user-layout">
+    <Row class="container">
+      <Col :sm="0" :md="12" class="left"></Col>
+      <Col :xs="24" :sm="24" :md="12" class="right"><RouterView /></Col>
+    </Row>
+    <GlobalFooter />
+  </div>
 </template>
 
-<script setup>
-
+<script lang="ts">
+import { Row, Col } from "ant-design-vue";
+import { defineComponent } from "vue";
+import GlobalFooter from "@/components/GlobalFooter.vue";
+export default defineComponent({
+  name: "UserLayout",
+  components: {
+    Row,
+    Col,
+    GlobalFooter,
+  },
+});
 </script>
 
-<style lang="less" scoped>
-.wrap{
+<style scoped lang="less">
+.user-layout {
+  height: 100vh;
+  overflow: hidden;
+  background: rgb(175, 205, 251);
+}
+.container {
+  height: 100%;
+}
+.left {
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("@/assets/login-bg.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+.right {
   display: flex;
   justify-content: center;
-  align-content: center;
-  width: 100vw;
-  height: 100vh;
-  background: url('@/assets/login-bg.jpg');
-  background-size: cover;
-  background-repeat: no-repeat;
-}
-footer{
-  position: fixed;
-  z-index: 1;
-  bottom: 0;
-  height: 40px;
-  width: 100%;
-  text-align: center;
-  a{
-    color: white;
-  }
+  align-items: center;
 }
 </style>
