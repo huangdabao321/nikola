@@ -88,18 +88,36 @@
       show-icon
     />
   </div>
+  <div>
+    <Row :gutter="16">
+      <Col :span="24">
+        <Progress :percent="30" />
+        <Progress :percent="70" status="exception" />
+        <Progress :percent="100" />
+      </Col>
+      <Col span="24">
+        <Progress type="circle" :percent="75" />
+        <Progress type="circle" :percent="70" status="exception" />
+        <Progress type="circle" :percent="100" />
+      </Col>
+    </Row>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { Button, Space, Typography, Affix, Steps, Alert } from "ant-design-vue";
-import { PieChartTwoTone } from "@ant-design/icons-vue";
 import {
-  mixLighten,
-  mixDarken,
-  tinycolor,
-} from "vite-plugin-theme/es/colorUtils";
-import { replaceStyleVariables } from "vite-plugin-theme/es/client";
-import { generateColors, getThemeColors } from "./colors";
+  Button,
+  Space,
+  Typography,
+  Affix,
+  Steps,
+  Alert,
+  ConfigProvider,
+  Row,
+  Col,
+  Progress,
+} from "ant-design-vue";
+import { PieChartTwoTone } from "@ant-design/icons-vue";
 import { ref } from "vue";
 
 const TypographyText = Typography.Text;
@@ -108,6 +126,7 @@ const Step = Steps.Step;
 const bottom = ref(10);
 
 const colors = [
+  "#1890ff",
   "#0960bd",
   "#0084f4",
   "#009688",
@@ -120,16 +139,10 @@ const colors = [
 ];
 
 const handleClick = async (color: string) => {
-  const colors = generateColors({
-    mixDarken,
-    mixLighten,
-    tinycolor,
-    color,
-  });
-  const otherColors = getThemeColors(color);
-  // console.log("colors", [...otherColors, ...colors]);
-  await replaceStyleVariables({
-    colorVariables: [...otherColors, ...colors],
+  ConfigProvider.config({
+    theme: {
+      primaryColor: color,
+    },
   });
 };
 </script>

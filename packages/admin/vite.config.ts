@@ -6,22 +6,9 @@ import vueJsx from "@vitejs/plugin-vue-jsx";
 import { viteMockServe } from "vite-plugin-mock";
 import { createHtmlPlugin } from "vite-plugin-html";
 import path from "path";
-import {
-  antdDarkThemePlugin,
-  viteThemePlugin,
-  mixLighten,
-  mixDarken,
-  tinycolor,
-} from "vite-plugin-theme";
+import { antdDarkThemePlugin, viteThemePlugin } from "vite-plugin-theme";
 // 获取主题less变量
 import { getThemeVariables } from "ant-design-vue/dist/theme";
-import { getThemeColors, generateColors } from "./build/color.js";
-
-const colors = generateColors({
-  mixDarken,
-  mixLighten,
-  tinycolor,
-});
 
 export default defineConfig({
   define: {
@@ -57,7 +44,7 @@ export default defineConfig({
       },
     }),
     viteThemePlugin({
-      colorVariables: [...getThemeColors(), ...colors], // 需要给一个初始值才能正常使用功能
+      colorVariables: [""], // 需要给一个初始值才能正常使用功能
     }),
     antdDarkThemePlugin({
       darkModifyVars: {
