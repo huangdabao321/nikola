@@ -1,45 +1,69 @@
 <template>
-  <LayoutHeader style="">
-    <Switch v-model:checked="checked" @change="handleChange(checked)">
-      <template #checkedChildren>☀️</template>
-      <template #unCheckedChildren>🌒</template>
-    </Switch>
+  <LayoutHeader class="header">
+    <div></div>
+    <Space class="right">
+      <Switch v-model:checked="checked" @change="handleChange(checked)">
+        <template #checkedChildren>☀️</template>
+        <template #unCheckedChildren>🌒</template>
+      </Switch>
+      <Dropdown trigger="click" placement="bottomLeft">
+        <Avatar :src="avatar" />
+        <template #overlay>
+          <Menu>
+            <MenuItem> 个人中心 </MenuItem>
+            <MenuItem> 退出登陆 </MenuItem>
+          </Menu>
+        </template>
+      </Dropdown>
+    </Space>
   </LayoutHeader>
 </template>
 
 <script lang="ts">
-import { LayoutHeader, Switch } from "ant-design-vue";
+import {
+  LayoutHeader,
+  Switch,
+  Avatar,
+  Dropdown,
+  Space,
+  Menu,
+} from "ant-design-vue";
 import { defineComponent, ref } from "vue";
-import { loadDarkThemeCss } from "vite-plugin-theme/es/client";
+import { useAppStore, useUserStore } from "@/store";
+
 export default defineComponent({
   name: "TheHeader",
-  components: { LayoutHeader, Switch },
+  components: {
+    LayoutHeader,
+    Switch,
+    Avatar,
+    Dropdown,
+    Space,
+    Menu,
+    MenuItem: Menu.Item,
+  },
   setup() {
     const checked = ref(true);
+    const appStore = useAppStore();
+    const userStore = useUserStore();
+    const { avatar } = userStore.userInfo;
     const handleChange = async (checked: boolean) => {
-      const htmlRoot = document.body;
-      // const htmlRoot = document.querySelector("#htmlRoot");
-      if (!htmlRoot) {
-        return;
-      }
-      // light 模式
-      if (checked) {
-        htmlRoot.setAttribute("data-theme", "light");
-        // if (hasDarkClass) {
-        //   htmlRoot.classList.remove("dark");
-        // }
-      } else {
-        // 暗黑模式
-        await loadDarkThemeCss();
-        htmlRoot.setAttribute("data-theme", "dark");
-      }
+      appStore.toggleTheme(!checked);
     };
     return {
       checked,
       handleChange,
+      avatar,
     };
   },
 });
 </script>
 
-<style lang="less"></style>
+<style lang="less">
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>

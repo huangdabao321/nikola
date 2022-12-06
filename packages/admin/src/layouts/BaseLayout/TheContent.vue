@@ -15,6 +15,8 @@ export default {
 
 <style lang="less" scoped>
 .content-wrap {
+  padding: 20px;
   height: calc(100vh - 64px);
+  overflow-y: scroll;
 }
 </style>

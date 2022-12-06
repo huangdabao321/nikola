@@ -36,17 +36,13 @@ import { Form, Input, Button, Divider, message } from "ant-design-vue";
 import type { Rule } from "ant-design-vue/es/form";
 import { WechatOutlined } from "@ant-design/icons-vue";
 import { getTitle, isWechatEnv } from "@/utils/util";
-import useUserStore from "@/store/user";
+import { useUserStore } from "@/store";
 import { useRouter } from "vue-router";
-import { reactive, toRaw, unref } from "vue";
+import { reactive } from "vue";
 
 interface FormState {
   mobile: string;
   password: string;
-}
-
-interface errorResult {
-  message?: string;
 }
 
 const formState = reactive<FormState>({
@@ -67,16 +63,17 @@ const rules: Record<string, Rule[]> = {
 
 const useStore = useUserStore();
 const router = useRouter();
-const handleFinish = (values: FormState) => {
-  useStore
-    .login(values)
-    .then(() => {
-      message.success("欢迎回来!");
-      router.push("/welcome");
-    })
-    .catch((error: errorResult) => {
-      message.error(error.message);
-    });
+const handleFinish = async (values: FormState) => {
+  try {
+    await useStore.login(values);
+    message.success("欢迎回来!");
+    router.push("/welcome");
+  } catch (error: any) {
+    // @ts-ignore
+    message.error(
+      error?.response?.data?.message || error.message || "错误, 稍后再试"
+    );
+  }
 };
 
 const title = getTitle();

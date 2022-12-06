@@ -1,16 +1,5 @@
-export interface MenuType {
-  id: number;
-  pid: number;
-  name: string;
-  title: string;
-  path: string;
-  redirect: string;
-  component: string;
-  icon: string;
-  hideInMenu: boolean;
-  hideChildren: boolean;
-}
-const adminMenu: MenuType[] = [
+import { Permission } from "../../src/store/modules/user/types";
+const adminMenu: Permission[] = [
   {
     id: 1,
     pid: 0,
@@ -22,6 +11,7 @@ const adminMenu: MenuType[] = [
     icon: "",
     hideInMenu: true,
     hideChildren: false,
+    ignoreCache: false,
   },
   {
     id: 2,
@@ -61,7 +51,7 @@ const adminMenu: MenuType[] = [
   },
 ];
 
-const teacherMenu: MenuType[] = [
+const teacherMenu: Permission[] = [
   {
     id: 1,
     pid: 0,

@@ -8,4 +8,10 @@ import { ConfigProvider } from "ant-design-vue";
   </ConfigProvider>
 </template>
 
-<style scoped></style>
+<style>
+html,
+body,
+#app {
+  overflow: hidden;
+}
+</style>

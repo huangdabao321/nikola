@@ -1,11 +1,18 @@
-export interface Permission {
+import { defineComponent } from "vue";
+import type { RouteRecordRaw, RouteMeta } from "vue-router";
+
+export type Component<T = any> =
+  | ReturnType<typeof defineComponent>
+  | (() => Promise<typeof import("*.vue")>)
+  | (() => Promise<T>);
+
+// @ts-ignore
+export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, "meta"> {
   id: number;
   name: string;
-  desc: string;
-}
-export interface Role {
-  id: number;
-  name: string;
-  desc: string;
-  permissions: Permission[];
+  meta: RouteMeta;
+  component?: Component | string;
+  components?: Component;
+  children?: AppRouteRecordRaw[];
+  fullPath?: string;
 }

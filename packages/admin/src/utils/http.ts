@@ -1,33 +1,36 @@
 import axios from "axios";
 import { message } from "ant-design-vue";
 import useLocalStorage from "@/hooks/useLocalStorage";
-const { setItem, getItem, removeItem } = useLocalStorage();
-const ACCESS_TOKEN = "accessToken";
+import { ACCESSTOKEN } from "@/store/modules/user/constants";
+
+const { getItem, removeItem } = useLocalStorage();
+
 const instance = axios.create({
   timeout: 1000,
 });
 
 // 请求失败处理
 const requestErrorHandler = (error: any) => {
+  console.log("requestErrorHandler", error);
   return Promise.reject(error);
 };
 
 // 返回失败处理
 const responseErrorHandler = (error: any) => {
-  const { data, status } = error.response;
+  const { status } = error.response;
   switch (status) {
     case 401:
       message.error("token过期");
-      removeItem(ACCESS_TOKEN);
+      removeItem(ACCESSTOKEN);
       break;
     default:
-      return Promise.reject(data);
       break;
   }
+  return Promise.reject(error);
 };
-
+// 请求拦截器
 instance.interceptors.request.use((config) => {
-  const accessToken = getItem(ACCESS_TOKEN);
+  const accessToken = getItem(ACCESSTOKEN);
   if (accessToken) {
     return {
       ...config,
@@ -40,13 +43,10 @@ instance.interceptors.request.use((config) => {
   return config;
 }, requestErrorHandler);
 
+// 返回拦截器
 instance.interceptors.response.use((response) => {
-  const { data } = response.data;
-  const { accessToken, expire } = data;
-  if (accessToken) {
-    setItem(ACCESS_TOKEN, accessToken, expire);
-  }
-  return Promise.resolve(data);
+  const data = response.data;
+  return data;
 }, responseErrorHandler);
 
 export default instance;
