@@ -31,10 +31,13 @@ router.beforeEach(async (to) => {
           await userStore.info();
           // @ts-ignore
           const routes = await generateRoutes(roles);
+          // routes.forEach((route) => {
+          //   router.addRoute(route);
+          // });
           return true;
         } catch (error: any) {
           message.error(
-            error.response.data.message || error.message || "错误,稍后再试"
+            error?.response?.data?.message || error?.message || "错误,稍后再试"
           );
           return loginPath;
         }

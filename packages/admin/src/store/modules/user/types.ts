@@ -16,6 +16,7 @@ export interface Permission {
   hideChildren: boolean;
   ignoreCache?: boolean;
   actions?: Action[];
+  children?: Permission[];
 }
 
 export interface Role {
