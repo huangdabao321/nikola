@@ -2,7 +2,7 @@ import { message } from "ant-design-vue";
 import router from "@/router";
 import NProgress from "nprogress";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { useUserStore } from "@/store";
+import { useAppStore, useUserStore } from "@/store";
 import generateRoutes from "@/router/generateRoutes";
 import { storeToRefs } from "pinia";
 import { unref } from "vue";
@@ -26,14 +26,16 @@ router.beforeEach(async (to) => {
     } else {
       const userStore = useUserStore();
       let { roles } = storeToRefs(userStore);
-      if (roles && !roles.length) {
+      if (roles && !unref(roles).length) {
         try {
           await userStore.info();
           // @ts-ignore
-          const routes = await generateRoutes(roles);
-          // routes.forEach((route) => {
-          //   router.addRoute(route);
-          // });
+          const [routes, menus] = await generateRoutes(roles);
+          routes.forEach((route) => {
+            router.addRoute(route);
+          });
+          const appStore = useAppStore();
+          appStore.setMenus(menus);
           return true;
         } catch (error: any) {
           message.error(

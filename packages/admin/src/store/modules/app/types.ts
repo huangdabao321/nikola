@@ -1,5 +1,5 @@
 import { BoldOutlinedIconType } from "@ant-design/icons-vue/lib/icons/BoldOutlined";
-import type { RouteRecordNormalized } from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
 
 export interface AppState {
   theme: string;
@@ -12,5 +12,5 @@ export interface AppState {
   globalSettings: boolean;
   device: string;
   tabBar: boolean;
-  serverMenu: RouteRecordNormalized[];
+  menus: RouteRecordRaw[];
 }

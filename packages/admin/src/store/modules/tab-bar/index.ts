@@ -1,10 +1,6 @@
 import { defineStore } from "pinia";
 import { TabBarState } from "./types";
-import {
-  DEFAULT_ROUTE,
-  DEFAULT_ROUTE_NAME,
-  REDIRECT_ROUTE_NAME,
-} from "@/router/constants";
+import { DEFAULT_ROUTE, DEFAULT_ROUTE_NAME } from "@/router/constants";
 import { TagProps } from "./types";
 import type { RouteLocationNormalized } from "vue-router";
 import { isString } from "@nikola/utils/is";
@@ -19,7 +15,7 @@ function formatTag(route: RouteLocationNormalized): TagProps {
     ignoreCache: meta.ignoreCache as boolean,
   };
 }
-const BAN_LIST = [REDIRECT_ROUTE_NAME];
+
 const useTabBar = defineStore("tabBar", {
   state: (): TabBarState => ({
     cacheTabList: new Set([DEFAULT_ROUTE_NAME]),
@@ -35,9 +31,6 @@ const useTabBar = defineStore("tabBar", {
   },
   actions: {
     updateTabList(route: RouteLocationNormalized) {
-      if (BAN_LIST.includes(route.name as string)) {
-        return;
-      }
       this.tagList.push(formatTag(route));
       if (!route.meta.ignoreCache) {
         this.cacheTabList.add(route.name as string);

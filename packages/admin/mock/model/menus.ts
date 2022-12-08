@@ -32,7 +32,7 @@ const adminMenu: Permission[] = [
     title: "系统设置",
     path: "/system",
     redirect: "",
-    component: "RouteView",
+    component: "RouterView",
     icon: "",
     hideInMenu: false,
     hideChildren: false,

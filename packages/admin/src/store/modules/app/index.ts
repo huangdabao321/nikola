@@ -1,9 +1,8 @@
 import { defineStore } from "pinia";
 import { AppState } from "./types";
 import defaultSettings from "@/config/settings.json";
-import type { RouteRecordNormalized } from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
 import { loadDarkThemeCss } from "vite-plugin-theme/es/client";
-import { getMenus } from "@/api/menu";
 
 const useAppStore = defineStore("app", {
   state: (): AppState => ({ ...defaultSettings }),
@@ -14,8 +13,8 @@ const useAppStore = defineStore("app", {
     appDevice(state: AppState): string {
       return state.device;
     },
-    appAsyncMenus(state: AppState): RouteRecordNormalized[] {
-      return state.serverMenu as unknown as RouteRecordNormalized[];
+    appMenus(state: AppState): RouteRecordRaw[] {
+      return state.menus as unknown as RouteRecordRaw[];
     },
   },
   actions: {
@@ -37,13 +36,11 @@ const useAppStore = defineStore("app", {
       this.device = device;
     },
     clearServerMenu() {
-      this.serverMenu = [];
+      this.menus = [];
     },
-    async fetchServerMenuConfig() {
+    setMenus(menus: RouteRecordRaw[]) {
       // let notifyInstance: NotifycationReturn | null = null;
-      try {
-        const { data } = await getMenus();
-      } catch (error) {}
+      this.menus = menus;
     },
   },
 });

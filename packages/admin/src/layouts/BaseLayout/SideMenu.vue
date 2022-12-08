@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { LayoutSider } from "ant-design-vue";
-import BaseMenu from "@/layouts/BaseLayout/BaseMenu/index.vue";
+import BaseMenu from "@/layouts/BaseLayout/BaseMenu/index.tsx";
 </script>
 
 <template>
