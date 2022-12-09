@@ -2,6 +2,8 @@ import type { RouteRecordRaw } from "vue-router";
 
 export const WHITE_LIST = ["notFound", "login"];
 
+export const LOGIN_PATH = "/user/login";
+
 export const NOT_FOUND = "notFound";
 
 export const NOT_FOUND_ROUTE: RouteRecordRaw = {

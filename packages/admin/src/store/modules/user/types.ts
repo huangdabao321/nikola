@@ -10,6 +10,7 @@ export interface Permission {
   title: string;
   path: string;
   redirect: string;
+  target?: string;
   component: string;
   icon: string;
   hideInMenu: boolean;

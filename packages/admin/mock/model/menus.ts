@@ -20,6 +20,7 @@ const adminMenu: Permission[] = [
     title: "欢迎页",
     path: "/welcome",
     redirect: "",
+    target: "https://baidu.com/",
     component: "welcome",
     icon: "",
     hideInMenu: false,

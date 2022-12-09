@@ -8,7 +8,6 @@ export default {
 
 <template>
   <LayoutContent class="content-wrap">
-    content
     <slot name="default"></slot>
   </LayoutContent>
 </template>

@@ -1,6 +1,9 @@
 <template>
   <LayoutHeader class="header">
-    <div></div>
+    <div class="collapsed-wrap" @click="handleCollapsed">
+      <menu-unfold-outlined v-if="collapsed" />
+      <menu-fold-outlined v-else />
+    </div>
     <Space class="right">
       <Switch v-model:checked="checked" @change="handleChange(checked)">
         <template #checkedChildren>☀️</template>
@@ -28,8 +31,12 @@ import {
   Space,
   Menu,
 } from "ant-design-vue";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
 import { defineComponent, ref } from "vue";
 import { useAppStore, useUserStore } from "@/store";
+import { collapsedKey } from "@/layouts/BaseLayout/keys";
+import { inject } from "vue";
+import type { Ref } from "vue";
 
 export default defineComponent({
   name: "TheHeader",
@@ -41,6 +48,8 @@ export default defineComponent({
     Space,
     Menu,
     MenuItem: Menu.Item,
+    MenuFoldOutlined,
+    MenuUnfoldOutlined,
   },
   setup() {
     const checked = ref(true);
@@ -50,10 +59,18 @@ export default defineComponent({
     const handleChange = async (checked: boolean) => {
       appStore.toggleTheme(!checked);
     };
+    const collapsed = inject<Ref<boolean>>(collapsedKey);
+
+    const handleCollapsed = () => {
+      // @ts-ignore
+      collapsed.value = !collapsed.value;
+    };
     return {
       checked,
-      handleChange,
       avatar,
+      collapsed,
+      handleChange,
+      handleCollapsed,
     };
   },
 });
@@ -65,5 +82,10 @@ export default defineComponent({
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  padding-left: 10px;
+  .collapsed-wrap {
+    font-size: 30px;
+    color: white;
+  }
 }
 </style>

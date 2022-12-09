@@ -1,28 +1,25 @@
-import { message } from "ant-design-vue";
+import { unref } from "vue";
+import { storeToRefs } from "pinia";
 import router from "@/router";
+import { message } from "ant-design-vue";
 import NProgress from "nprogress";
+import { WHITE_LIST, DEFAULT_ROUTE_NAME, LOGIN_PATH } from "@/router/constants";
+import { ACCESSTOKEN } from "@/store/modules/user/constants";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { useAppStore, useUserStore } from "@/store";
 import generateRoutes from "@/router/generateRoutes";
-import { storeToRefs } from "pinia";
-import { unref } from "vue";
 
 NProgress.configure({
   showSpinner: false,
 });
 
 const { getItem } = useLocalStorage();
-const ACCESS_TOKEN = "accessToken";
-
-const whiteList: string[] = ["login"];
-const loginPath = "/user/login";
-const homePath = "/welcome";
 
 router.beforeEach(async (to) => {
-  const token = getItem(ACCESS_TOKEN);
+  const token = getItem(ACCESSTOKEN);
   if (token) {
-    if (to.path === loginPath) {
-      return homePath;
+    if (to.path === LOGIN_PATH) {
+      return DEFAULT_ROUTE_NAME;
     } else {
       const userStore = useUserStore();
       let { roles } = storeToRefs(userStore);
@@ -36,22 +33,22 @@ router.beforeEach(async (to) => {
           });
           const appStore = useAppStore();
           appStore.setMenus(menus);
-          return true;
+          return to.path;
         } catch (error: any) {
           message.error(
             error?.response?.data?.message || error?.message || "错误,稍后再试"
           );
-          return loginPath;
+          return LOGIN_PATH;
         }
       } else {
         return true;
       }
     }
   } else {
-    if (whiteList.includes(to.name as string)) {
+    if (WHITE_LIST.includes(to.name as string)) {
       return true;
     } else {
-      return loginPath;
+      return LOGIN_PATH;
     }
   }
 });

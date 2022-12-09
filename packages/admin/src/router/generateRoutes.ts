@@ -12,7 +12,7 @@ const componentMap = {
 
 const modules = import.meta.glob("../views/**/*.vue");
 
-const asyncComponent = [];
+const asyncComponent = {};
 for (const key in modules) {
   const component = modules[key];
   const pathArr = key.split("/");
@@ -56,6 +56,7 @@ function transformData(list: Permission[]): RouteRecordRaw[] {
         hideChildren: item.hideChildren,
         ignoreCache: !!item.ignoreCache,
         title: item.title,
+        target: item.target,
       },
       component: componentMap[item.component] || asyncComponent[item.component],
     };

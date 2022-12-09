@@ -3,13 +3,18 @@ import { Layout } from "ant-design-vue";
 import TheHeader from "./TheHeader.vue";
 import SideMenu from "./SideMenu.vue";
 import TheContent from "./TheContent.vue";
+import { provide, ref } from "vue";
+import { collapsedKey } from "@/layouts/BaseLayout/keys";
+
+const collapsed = ref<boolean>(false);
+provide(collapsedKey, collapsed);
 </script>
 
 <template>
   <Layout>
-    <TheHeader></TheHeader>
+    <SideMenu></SideMenu>
     <Layout>
-      <SideMenu></SideMenu>
+      <TheHeader></TheHeader>
       <TheContent>
         <RouterView />
       </TheContent>
