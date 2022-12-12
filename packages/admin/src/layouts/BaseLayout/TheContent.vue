@@ -16,6 +16,6 @@ export default {
 .content-wrap {
   padding: 20px;
   height: calc(100vh - 64px);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 </style>

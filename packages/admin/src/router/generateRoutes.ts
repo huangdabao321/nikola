@@ -57,6 +57,7 @@ function transformData(list: Permission[]): RouteRecordRaw[] {
         ignoreCache: !!item.ignoreCache,
         title: item.title,
         target: item.target,
+        icon: item.icon,
       },
       component: componentMap[item.component] || asyncComponent[item.component],
     };

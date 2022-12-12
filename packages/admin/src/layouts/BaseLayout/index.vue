@@ -5,16 +5,18 @@ import SideMenu from "./SideMenu.vue";
 import TheContent from "./TheContent.vue";
 import { provide, ref } from "vue";
 import { collapsedKey } from "@/layouts/BaseLayout/keys";
+import useResponsive from "@/hooks/responsive";
 
 const collapsed = ref<boolean>(false);
 provide(collapsedKey, collapsed);
+useResponsive(true);
 </script>
 
 <template>
   <Layout>
-    <SideMenu></SideMenu>
+    <SideMenu />
     <Layout>
-      <TheHeader></TheHeader>
+      <TheHeader />
       <TheContent>
         <RouterView />
       </TheContent>

@@ -32,7 +32,7 @@ import {
   Menu,
 } from "ant-design-vue";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watchEffect } from "vue";
 import { useAppStore, useUserStore } from "@/store";
 import { collapsedKey } from "@/layouts/BaseLayout/keys";
 import { inject } from "vue";
@@ -59,7 +59,13 @@ export default defineComponent({
     const handleChange = async (checked: boolean) => {
       appStore.toggleTheme(!checked);
     };
-    const collapsed = inject<Ref<boolean>>(collapsedKey);
+    const collapsed = inject<Ref<boolean>>(collapsedKey, ref(false));
+
+    watchEffect(() => {
+      if (appStore.device === "mobile") {
+        console.log("collapsed", collapsed);
+      }
+    });
 
     const handleCollapsed = () => {
       // @ts-ignore

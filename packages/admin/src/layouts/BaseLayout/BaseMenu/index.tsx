@@ -1,11 +1,11 @@
-import { defineComponent, inject, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { Menu } from "ant-design-vue";
 import { useAppStore } from "@/store";
 import { storeToRefs } from "pinia";
 import type { RouteRecordRaw, RouteMeta } from "vue-router";
 import { useRouter, useRoute } from "vue-router";
 import { isUrl } from '@nikola/utils/is'
-import { collapsedKey } from '@/layouts/BaseLayout/keys'
+import { SettingFilled, SettingOutlined } from "@ant-design/icons-vue";
 
 export default defineComponent({
   name: "BaseMenu",
@@ -16,16 +16,11 @@ export default defineComponent({
     const openKeys = ref<string[]>([])
 
     const handleMenuClick = (item: RouteRecordRaw) => {
-      console.log('menu click',  selectedKey.value, openKeys.value)
-      selectedKey.value = [item.name as string]
+      go(item)
     }
     const handleTitleClick = (item: RouteRecordRaw) => {
-      // openKeys.value = [item.name as string]
       console.log('title click',  selectedKey.value, openKeys.value)
-
     }
-
-    const collapsed = inject(collapsedKey)
 
     const router = useRouter()
     const route = useRoute()
@@ -33,7 +28,6 @@ export default defineComponent({
     const go = (item: RouteRecordRaw):void => {
       const fullPath = item.path
       const target = item?.meta?.target as string
-      console.log(isUrl(fullPath))
       if (target && isUrl(target)) {
         window.location.href = target
         selectedKey.value = [item.name as string]
@@ -41,16 +35,22 @@ export default defineComponent({
       }
       const { hideInMenu } = item.meta as RouteMeta
       if (route.name === item.name && !hideInMenu) {
-        selectedKey.value = [item.name as string]
         return
       }
       router.push({ name: item.name })
     }
     const renderMenuItem = (item: RouteRecordRaw) => {
-      return <Menu.Item key={item.name} title={item?.meta?.title as string} onClick={() => handleMenuClick(item)}>{ item?.meta?.title as string }</Menu.Item>
+      // todo icon问题
+      return <Menu.Item 
+                key={item.name} 
+                onClick={() => handleMenuClick(item)}
+                v-slots={{
+                  icon: () => <SettingOutlined/>
+                }}
+              >{ item?.meta?.title }</Menu.Item>
     }
 
-    const renderSubMenu = (records: RouteRecordRaw[], nodes = []) => {
+    const renderSubMenu = (records: RouteRecordRaw[], nodes: any = []) => {
       const len = records.length
       for (let i = 0; i < len; i++) {
         const element = records[i];
@@ -63,7 +63,11 @@ export default defineComponent({
           nodes.push(node)
         }
         if (!hideInMenu && children && !hideChidlren) {
-          node = <Menu.SubMenu key={element.name} title={element?.meta?.title} onTitleClick={() => handleTitleClick(element)}>{renderSubMenu(children)}</Menu.SubMenu>
+          node = <Menu.SubMenu
+                    key={element.name}
+                    onTitleClick={() => handleTitleClick(element)}
+                    v-slots={{icon: () => <SettingOutlined/>, title: () => element?.meta?.title }}
+                  >{renderSubMenu(children)}</Menu.SubMenu>
           nodes.push(node)
         }
         if (hideInMenu && children && !hideChidlren) {
