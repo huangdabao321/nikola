@@ -8,6 +8,7 @@ import { ACCESSTOKEN } from "@/store/modules/user/constants";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { useAppStore, useUserStore } from "@/store";
 import generateRoutes from "@/router/generateRoutes";
+import { setRouteEmitter } from "./utils/routeChange";
 
 NProgress.configure({
   showSpinner: false,
@@ -17,6 +18,7 @@ const { getItem } = useLocalStorage();
 
 router.beforeEach(async (to) => {
   const token = getItem(ACCESSTOKEN);
+  setRouteEmitter(to);
   if (token) {
     if (to.path === LOGIN_PATH) {
       return DEFAULT_ROUTE_NAME;

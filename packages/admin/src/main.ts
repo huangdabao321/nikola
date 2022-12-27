@@ -5,6 +5,7 @@ import pinia from "@/store";
 import "nprogress/nprogress.css";
 import "ant-design-vue/dist/antd.variable.less";
 import "./permission.ts";
+import "./style.less";
 
 const app = createApp(App);
 app.use(router);

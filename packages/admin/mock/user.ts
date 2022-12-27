@@ -57,4 +57,48 @@ export default [
       }
     },
   },
+  {
+    url: "/api/users",
+    method: "get",
+    response: ({ headers }) => {
+      const { authorization } = headers;
+      if (!authorization) {
+        return {
+          message: "Invalid token",
+        };
+      }
+      return {
+        code: 0,
+        success: true,
+        data: [
+          {
+            id: 1,
+            name: "admin",
+            mobile: "15172361339",
+          },
+          {
+            id: 2,
+            name: "test",
+            mobile: "15172361338",
+          },
+        ],
+      };
+    },
+  },
+  {
+    url: "/api/users",
+    method: "post",
+    response: ({ headers }) => {
+      const { authorization } = headers;
+      if (!authorization) {
+        return {
+          message: "Invalid token",
+        };
+      }
+      return {
+        code: 0,
+        success: true,
+      };
+    },
+  },
 ] as MockMethod[];

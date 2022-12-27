@@ -1,35 +1,37 @@
 <script setup lang="ts">
-import { inject, computed, ref, watchEffect } from "vue";
-import type { Ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { LayoutSider, Drawer } from "ant-design-vue";
 import BaseMenu from "@/layouts/BaseLayout/BaseMenu/index.tsx";
-import { collapsedKey } from "@/layouts/BaseLayout/keys";
 import { useAppStore } from "@/store";
 import logo from "@/assets/vue.svg";
+import { storeToRefs } from "pinia";
 const appStore = useAppStore();
+const { menuCollapse, device, theme } = storeToRefs(appStore);
 
 const isMobile = computed(() => {
-  return appStore.device === "mobile";
+  return device.value === "mobile";
 });
-
-const collapsed = inject<Ref<boolean>>(collapsedKey, ref(false));
 
 const visible = ref(false);
 
 const close = () => {
   visible.value = false;
-  collapsed.value = true;
+  appStore.updateSettings({ menuCollapse: true });
 };
 
 watchEffect(() => {
   if (appStore.device === "mobile") {
-    visible.value = !collapsed.value;
+    visible.value = !menuCollapse.value;
   }
+});
+
+const sideBg = computed(() => {
+  return theme.value === "light" ? "#001529" : "#1f1f1f";
 });
 </script>
 
 <template>
-  <LayoutSider class="sider-menu" :collapsed="collapsed" v-if="!isMobile">
+  <LayoutSider class="sider-menu" :collapsed="menuCollapse" v-if="!isMobile">
     <div class="logo">
       <img :src="logo" />
     </div>
@@ -45,7 +47,7 @@ watchEffect(() => {
     :footer="null"
     :body-style="{
       padding: 0,
-      background: '#001529',
+      background: sideBg,
     }"
     v-else
   >

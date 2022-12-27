@@ -1,25 +1,25 @@
-import { defineComponent, ref } from "vue";
+import {  defineComponent, ref } from "vue";
 import { Menu } from "ant-design-vue";
 import { useAppStore } from "@/store";
 import { storeToRefs } from "pinia";
 import type { RouteRecordRaw, RouteMeta } from "vue-router";
 import { useRouter, useRoute } from "vue-router";
 import { isUrl } from '@nikola/utils/is'
-import { SettingFilled, SettingOutlined } from "@ant-design/icons-vue";
+import { listenerRouteChange } from "@/utils/routeChange";
+import { useMenuTree } from './use-menu-tree'
+import Icon from '@/components/Icon/index.vue'
 
 export default defineComponent({
   name: "BaseMenu",
   setup(props) {
     const appStore = useAppStore();
     const { menus } = storeToRefs(appStore);
-    const selectedKey = ref<string[]>([])
+    const selectedKeys = ref<string[]>([])
     const openKeys = ref<string[]>([])
+    const { menuTree } = useMenuTree()
 
     const handleMenuClick = (item: RouteRecordRaw) => {
       go(item)
-    }
-    const handleTitleClick = (item: RouteRecordRaw) => {
-      console.log('title click',  selectedKey.value, openKeys.value)
     }
 
     const router = useRouter()
@@ -30,7 +30,7 @@ export default defineComponent({
       const target = item?.meta?.target as string
       if (target && isUrl(target)) {
         window.location.href = target
-        selectedKey.value = [item.name as string]
+        selectedKeys.value = [item.name as string]
         return
       }
       const { hideInMenu } = item.meta as RouteMeta
@@ -39,13 +39,52 @@ export default defineComponent({
       }
       router.push({ name: item.name })
     }
+
+    const findMenuOpenKeys = (name: string) => {
+      const result: string[] = []
+      let isFind = false
+      const backtrack = (item: RouteRecordRaw, keys: string[], target: string) => {
+        if (item.name === target) {
+          isFind = true
+          result.push(...keys, item.name)
+          return
+        }
+        if (item.children?.length) {
+          item.children.forEach((el) => {
+            backtrack(el, [...keys], target)
+          })
+        }
+      }
+      menuTree.value.forEach((el: RouteRecordRaw) => {
+        if (isFind) {
+          return
+        }
+        backtrack(el, [el.name as string], name)
+      })
+      return result
+    }
+
+    listenerRouteChange((newRoute) => {
+      const { hideInMenu } = newRoute.meta
+      if (!hideInMenu) {
+        const menuOpenKeys = findMenuOpenKeys( newRoute.name as string)
+        const keySet = new Set([...menuOpenKeys])
+        openKeys.value = [...keySet]
+        selectedKeys.value = [ menuOpenKeys[menuOpenKeys.length - 1] ]
+      }
+    }, true )
+
+    const renderIcon = (item : any) => {
+      return item.meta && item.meta.icon ? () => <Icon icon={ item?.meta?.icon as string } /> : null
+    }
+
     const renderMenuItem = (item: RouteRecordRaw) => {
-      // todo icon问题
+      
       return <Menu.Item 
-                key={item.name} 
+                key={item.name}
                 onClick={() => handleMenuClick(item)}
                 v-slots={{
-                  icon: () => <SettingOutlined/>
+                  icon: renderIcon(item)
                 }}
               >{ item?.meta?.title }</Menu.Item>
     }
@@ -65,8 +104,7 @@ export default defineComponent({
         if (!hideInMenu && children && !hideChidlren) {
           node = <Menu.SubMenu
                     key={element.name}
-                    onTitleClick={() => handleTitleClick(element)}
-                    v-slots={{icon: () => <SettingOutlined/>, title: () => element?.meta?.title }}
+                    v-slots={{icon: renderIcon(element), title: () => element?.meta?.title }}
                   >{renderSubMenu(children)}</Menu.SubMenu>
           nodes.push(node)
         }
@@ -81,7 +119,7 @@ export default defineComponent({
       <Menu
         theme="dark"
         mode="inline"
-        v-model:selectedKey={selectedKey.value}
+        v-model:selectedKeys={selectedKeys.value}
         v-model:openKeys={openKeys.value}
       >
         { renderSubMenu(menus.value) }

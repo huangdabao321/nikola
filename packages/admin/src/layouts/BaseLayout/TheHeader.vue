@@ -1,11 +1,13 @@
 <template>
-  <LayoutHeader class="header">
+  <LayoutHeader class="header" :style="headBg">
     <div class="collapsed-wrap" @click="handleCollapsed">
-      <menu-unfold-outlined v-if="collapsed" />
-      <menu-fold-outlined v-else />
+      <Transition name="fade" mode="out-in">
+        <menu-unfold-outlined v-if="menuCollapse" />
+        <menu-fold-outlined v-else />
+      </Transition>
     </div>
     <Space class="right">
-      <Switch v-model:checked="checked" @change="handleChange(checked)">
+      <Switch v-model:checked="checked">
         <template #checkedChildren>☀️</template>
         <template #unCheckedChildren>🌒</template>
       </Switch>
@@ -32,11 +34,9 @@ import {
   Menu,
 } from "ant-design-vue";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons-vue";
-import { defineComponent, ref, watchEffect } from "vue";
+import { computed, defineComponent } from "vue";
 import { useAppStore, useUserStore } from "@/store";
-import { collapsedKey } from "@/layouts/BaseLayout/keys";
-import { inject } from "vue";
-import type { Ref } from "vue";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
   name: "TheHeader",
@@ -52,30 +52,37 @@ export default defineComponent({
     MenuUnfoldOutlined,
   },
   setup() {
-    const checked = ref(true);
     const appStore = useAppStore();
     const userStore = useUserStore();
     const { avatar } = userStore.userInfo;
-    const handleChange = async (checked: boolean) => {
-      appStore.toggleTheme(!checked);
-    };
-    const collapsed = inject<Ref<boolean>>(collapsedKey, ref(false));
+    const { menuCollapse, theme } = storeToRefs(appStore);
 
-    watchEffect(() => {
-      if (appStore.device === "mobile") {
-        console.log("collapsed", collapsed);
-      }
+    const checked = computed({
+      get() {
+        return theme.value === "light";
+      },
+      set(newValue: boolean) {
+        const theme = newValue ? "light" : "dark";
+        appStore.toggleTheme(newValue);
+        appStore.updateSettings({ theme });
+      },
+    });
+
+    const headBg = computed(() => {
+      return theme.value === "light"
+        ? { backgroundColor: "white", color: "#001529" }
+        : { backgroundColor: "rgba(144, 147, 153, 0.3)" };
     });
 
     const handleCollapsed = () => {
       // @ts-ignore
-      collapsed.value = !collapsed.value;
+      appStore.updateSettings({ menuCollapse: !menuCollapse.value });
     };
     return {
       checked,
       avatar,
-      collapsed,
-      handleChange,
+      menuCollapse,
+      headBg,
       handleCollapsed,
     };
   },
@@ -91,7 +98,6 @@ export default defineComponent({
   padding-left: 10px;
   .collapsed-wrap {
     font-size: 30px;
-    color: white;
   }
 }
 </style>

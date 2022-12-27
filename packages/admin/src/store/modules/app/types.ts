@@ -1,4 +1,3 @@
-import { BoldOutlinedIconType } from "@ant-design/icons-vue/lib/icons/BoldOutlined";
 import type { RouteRecordRaw } from "vue-router";
 
 export interface AppState {

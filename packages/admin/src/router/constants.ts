@@ -15,7 +15,7 @@ export const NOT_FOUND_ROUTE: RouteRecordRaw = {
 export const DEFAULT_ROUTE_NAME = "welcome";
 
 export const DEFAULT_ROUTE = {
-  title: "工作区",
+  title: "欢迎页",
   name: DEFAULT_ROUTE_NAME,
   fullPath: "/welcome",
 };

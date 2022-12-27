@@ -1,4 +1,5 @@
 import { Permission } from "../../src/store/modules/user/types";
+
 const adminMenu: Permission[] = [
   {
     id: 1,
@@ -22,7 +23,7 @@ const adminMenu: Permission[] = [
     redirect: "",
     target: "",
     component: "welcome",
-    icon: "smile-outlined",
+    icon: "ant-design:chrome-outlined",
     hideInMenu: false,
     hideChildren: false,
   },
@@ -32,9 +33,9 @@ const adminMenu: Permission[] = [
     name: "system",
     title: "系统设置",
     path: "/system",
-    redirect: "setting-outlined",
+    redirect: "",
     component: "RouterView",
-    icon: "",
+    icon: "ant-design:setting-outlined",
     hideInMenu: false,
     hideChildren: false,
   },

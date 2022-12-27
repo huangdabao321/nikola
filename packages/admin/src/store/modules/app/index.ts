@@ -22,14 +22,14 @@ const useAppStore = defineStore("app", {
       // @ts-ignore-next-line
       this.$patch(partial);
     },
-    async toggleTheme(dark: boolean) {
-      if (dark) {
+    async toggleTheme(light: boolean) {
+      if (light) {
+        this.theme = "light";
+        document.documentElement.setAttribute("data-theme", "light");
+      } else {
         this.theme = "dark";
         document.documentElement.setAttribute("data-theme", "dark");
         await loadDarkThemeCss();
-      } else {
-        this.theme = "light";
-        document.documentElement.setAttribute("data-theme", "light");
       }
     },
     toggleDevice(device: string) {

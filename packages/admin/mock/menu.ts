@@ -1,8 +1,8 @@
-import { MenuType, adminMenu, teacherMenu } from "./model/menus";
+import { adminMenu, teacherMenu } from "./model/menus";
 import { MockMethod } from "vite-plugin-mock";
-
+import { Permission } from "../src/store/modules/user/types";
 type data = {
-  data: MenuType[];
+  data: Permission[];
 };
 export default [
   {
